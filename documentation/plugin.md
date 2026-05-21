@@ -1,18 +1,15 @@
 # Plugin Documentation
 
-<!-- Use this page to document your plugin. Below is a suggested structure. -->
-
 ## Overview
 
-This is a sample plugin demonstrating an API call action. It fetches data from a time API endpoint.
-
+This plugin imports LRK data using Hasura to create tables and import from the data source.
 ## Dependencies
 
 ### Backend
 
 ```kotlin
 dependencies {
-    implementation("com.ritense.valtimoplugins:sample-plugin:0.0.1")
+    implementation("com.ritense.valtimoplugins:lrk-import-plugin:0.0.1")
 }
 ```
 
