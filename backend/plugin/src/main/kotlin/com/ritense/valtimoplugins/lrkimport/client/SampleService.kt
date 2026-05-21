@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin
+package com.ritense.valtimoplugins.lrkimport.client
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.stereotype.Service
 
-@SpringBootApplication
-class TestApplication
+@Service
+class SampleService(
+    private val sampleClient: SampleClient,
+) {
+    fun printAPIResults(apiUrl: String): String {
+        val apiResponse = sampleClient.fetchTimeAPI(apiUrl)
 
-fun main(args: Array<String>) {
-    runApplication<TestApplication>(*args)
+        if (apiResponse.error != null) {
+            return "Failed: ${apiResponse.error}"
+        }
+
+        val tz = apiResponse.result?.body
+        return "Timezone: ${tz?.timeZone}, DateTime: ${tz?.dateTime}, DayOfWeek: ${tz?.dayOfWeek}, " +
+            "HTTP Status: ${apiResponse.responseStatus}"
+    }
 }

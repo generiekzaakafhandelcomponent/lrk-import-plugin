@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin.autoconfiguration
+package com.ritense.valtimoplugins.lrkimport
 
-import org.springframework.boot.autoconfigure.AutoConfiguration
-
-@AutoConfiguration
-class SampleAutoConfiguration
+abstract class BaseTest

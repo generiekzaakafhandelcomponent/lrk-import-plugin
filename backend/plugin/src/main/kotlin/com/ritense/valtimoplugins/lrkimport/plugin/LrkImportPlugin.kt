@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin.plugin
+package com.ritense.valtimoplugins.lrkimport.plugin
 
 import com.ritense.plugin.annotation.Plugin
 import com.ritense.plugin.annotation.PluginAction
 import com.ritense.plugin.annotation.PluginActionProperty
 import com.ritense.plugin.annotation.PluginProperty
 import com.ritense.processlink.domain.ActivityTypeWithEventName.SERVICE_TASK_START
-import com.ritense.valtimoplugins.sampleplugin.client.SampleService
+import com.ritense.valtimoplugins.lrkimport.client.SampleService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.operaton.bpm.engine.delegate.DelegateExecution
 
@@ -34,10 +34,10 @@ private val logger = KotlinLogging.logger {}
  */
 @Plugin(
     key = "sample-plugin",
-    title = "Sample Plugin",
-    description = "This is a sample plugin demonstrating an API call action.",
+    title = "LrkImport Plugin",
+    description = "Imports LRK data into a database",
 )
-open class SamplePlugin(
+open class LrkImportPlugin(
     private val sampleService: SampleService,
 ) {
     @PluginProperty(key = "apiUrl", secret = false)

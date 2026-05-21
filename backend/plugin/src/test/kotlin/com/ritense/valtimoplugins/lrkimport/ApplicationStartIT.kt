@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin.client
+package com.ritense.valtimoplugins.lrkimport
 
-import org.springframework.stereotype.Service
+import org.junit.jupiter.api.Test
 
-@Service
-class SampleService(
-    private val sampleClient: SampleClient,
-) {
-    fun printAPIResults(apiUrl: String): String {
-        val apiResponse = sampleClient.fetchTimeAPI(apiUrl)
-
-        if (apiResponse.error != null) {
-            return "Failed: ${apiResponse.error}"
-        }
-
-        val tz = apiResponse.result?.body
-        return "Timezone: ${tz?.timeZone}, DateTime: ${tz?.dateTime}, DayOfWeek: ${tz?.dayOfWeek}, " +
-            "HTTP Status: ${apiResponse.responseStatus}"
+internal class ApplicationStartIT : BaseIntegrationTest() {
+    @Test
+    fun `should start application`() {
     }
 }

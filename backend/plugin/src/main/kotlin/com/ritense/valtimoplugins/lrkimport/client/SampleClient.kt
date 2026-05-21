@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin.client
+package com.ritense.valtimoplugins.lrkimport.client
 
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient

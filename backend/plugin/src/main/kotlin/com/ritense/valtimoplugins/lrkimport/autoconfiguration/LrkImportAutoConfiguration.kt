@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.ritense.valtimoplugins.sampleplugin
+package com.ritense.valtimoplugins.lrkimport.autoconfiguration
 
-import org.junit.jupiter.api.Test
+import org.springframework.boot.autoconfigure.AutoConfiguration
 
-internal class ApplicationStartIT : BaseIntegrationTest() {
-    @Test
-    fun `should start application`() {
-    }
-}
+@AutoConfiguration
+class LrkImportAutoConfiguration
