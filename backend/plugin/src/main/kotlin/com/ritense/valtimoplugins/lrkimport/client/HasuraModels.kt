@@ -50,3 +50,4 @@ data class HasuraBulkRequest(
     val args: List<HasuraTrackTableRequest>,
     val continue_on_error: Boolean = true,
 )
+

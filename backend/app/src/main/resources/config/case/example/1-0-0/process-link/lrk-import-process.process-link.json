@@ -13,5 +13,16 @@
         "pluginActionDefinitionKey": "create-lrk-tables",
         "pluginConfigurationId": "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f60718",
         "actionProperties": {}
+    },
+  {
+    "activityId": "track-hasura-tables",
+    "activityType": "bpmn:ServiceTask:start",
+    "processLinkType": "plugin",
+    "pluginDefinitionKey": "lrk-import-plugin",
+    "pluginActionDefinitionKey": "track-hasura-tables",
+    "pluginConfigurationId": "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f60718",
+    "actionProperties": {
+      "tables": ["houder", "voorziening"]
     }
+  }
 ]

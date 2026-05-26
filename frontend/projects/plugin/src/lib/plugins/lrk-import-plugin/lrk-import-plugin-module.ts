@@ -17,15 +17,17 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {PluginTranslatePipeModule} from "@valtimo/plugin";
-import {FormModule, InputModule as ValtimoInputModule} from "@valtimo/components";
+import {CarbonMultiInputModule, EditorModule, FormModule, InputModule as ValtimoInputModule} from "@valtimo/components";
 import {LrkImportPluginConfigurationComponent} from "./components/lrk-import-plugin-configuration/lrk-import-plugin-configuration.component";
 import {CreateTablesActionConfigurationComponent} from "./components/create-tables-action-configuration/create-tables-action-configuration.component";
 import {TrackTablesActionConfigurationComponent} from "./components/track-tables-action-configuration/track-tables-action-configuration.component";
+import {ExecuteGraphQlQueryActionConfigurationComponent} from "./components/execute-graphql-query-action-configuration/execute-graphql-query-action-configuration.component";
+import {ExecuteGraphQlMutationActionConfigurationComponent} from "./components/execute-graphql-mutation-action-configuration/execute-graphql-mutation-action-configuration.component";
 
 @NgModule({
-  declarations: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent],
-  imports: [CommonModule, PluginTranslatePipeModule, FormModule, ValtimoInputModule],
-  exports: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent],
+  declarations: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent, ExecuteGraphQlQueryActionConfigurationComponent, ExecuteGraphQlMutationActionConfigurationComponent],
+  imports: [CommonModule, PluginTranslatePipeModule, FormModule, ValtimoInputModule, CarbonMultiInputModule, EditorModule],
+  exports: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent, ExecuteGraphQlQueryActionConfigurationComponent, ExecuteGraphQlMutationActionConfigurationComponent],
 })
 export class LrkImportPluginModule {
 }

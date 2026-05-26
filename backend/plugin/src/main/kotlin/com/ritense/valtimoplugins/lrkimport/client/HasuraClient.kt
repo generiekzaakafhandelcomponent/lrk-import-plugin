@@ -16,13 +16,12 @@
 
 package com.ritense.valtimoplugins.lrkimport.client
 
+import org.springframework.graphql.client.HttpSyncGraphQlClient
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 
-@Component
 class HasuraClient(
-    private val restClient: RestClient = RestClient.create(),
+    private val restClient: RestClient,
 ) {
     fun runSql(
         hasuraUrl: String,
@@ -55,5 +54,27 @@ class HasuraClient(
             .body(HasuraBulkRequest(args = requests))
             .retrieve()
             .toBodilessEntity()
+    }
+
+    fun executeGraphQlQuery(
+        hasuraUrl: String,
+        adminSecret: String,
+        query: String,
+        variables: Map<String, Any>,
+    ): Map<String, Any>? {
+        val client = HttpSyncGraphQlClient.builder(restClient)
+            .url("$hasuraUrl/v1/graphql")
+            .header("x-hasura-admin-secret", adminSecret)
+            .build()
+
+        val response = client.document(query)
+            .variables(variables)
+            .executeSync()
+
+        if (response.errors.isNotEmpty()) {
+            throw IllegalStateException("GraphQL errors: ${response.errors.joinToString { it.message }}")
+        }
+
+        return response.getData<Map<String, Any>>()
     }
 }

@@ -16,12 +16,14 @@
 
 package com.ritense.valtimoplugins.lrkimport.client
 
-import org.springframework.stereotype.Service
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-@Service
 class HasuraSchemaService(
     private val hasuraClient: HasuraClient,
 ) {
+    private val objectMapper = jacksonObjectMapper()
+
     fun createLrkTables(hasuraUrl: String, adminSecret: String) {
         hasuraClient.runSql(hasuraUrl, adminSecret, loadSql("sql/create_houder.sql"))
         hasuraClient.runSql(hasuraUrl, adminSecret, loadSql("sql/create_voorziening.sql"))
@@ -30,6 +32,19 @@ class HasuraSchemaService(
     fun trackTables(hasuraUrl: String, adminSecret: String, tables: List<String>) {
         hasuraClient.trackTables(hasuraUrl, adminSecret, tables)
     }
+
+    fun executeGraphQlQuery(
+        hasuraUrl: String,
+        adminSecret: String,
+        query: String,
+        variables: String?,
+    ): Map<String, Any>? =
+        hasuraClient.executeGraphQlQuery(hasuraUrl, adminSecret, query, parseVariables(variables))
+
+    private fun parseVariables(variables: String?): Map<String, Any> =
+        if (!variables.isNullOrBlank()) {
+            objectMapper.readValue(variables, object : TypeReference<Map<String, Any>>() {})
+        } else emptyMap()
 
     private fun loadSql(resourcePath: String): String =
         HasuraSchemaService::class.java.classLoader

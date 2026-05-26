@@ -19,6 +19,8 @@ import {LrkImportPluginConfigurationComponent} from "./components/lrk-import-plu
 import {LRK_IMPORT_PLUGIN_LOGO_BASE64} from "./assets";
 import {CreateTablesActionConfigurationComponent} from "./components/create-tables-action-configuration/create-tables-action-configuration.component";
 import {TrackTablesActionConfigurationComponent} from "./components/track-tables-action-configuration/track-tables-action-configuration.component";
+import {ExecuteGraphQlQueryActionConfigurationComponent} from "./components/execute-graphql-query-action-configuration/execute-graphql-query-action-configuration.component";
+import {ExecuteGraphQlMutationActionConfigurationComponent} from "./components/execute-graphql-mutation-action-configuration/execute-graphql-mutation-action-configuration.component";
 
 const lrkImportPluginSpecification: PluginSpecification = {
   pluginId: "lrk-import-plugin",
@@ -27,6 +29,8 @@ const lrkImportPluginSpecification: PluginSpecification = {
   functionConfigurationComponents: {
     "create-lrk-tables": CreateTablesActionConfigurationComponent,
     "track-hasura-tables": TrackTablesActionConfigurationComponent,
+    "execute-graphql-query": ExecuteGraphQlQueryActionConfigurationComponent,
+    "execute-graphql-mutation": ExecuteGraphQlMutationActionConfigurationComponent,
   },
   pluginTranslations: {
     nl: {
@@ -42,6 +46,12 @@ const lrkImportPluginSpecification: PluginSpecification = {
       tablePlaceholder: "Tabelnaam",
       addTable: "+ Tabel toevoegen",
       removeTable: "Verwijderen",
+      "execute-graphql-query": "Voer GraphQL query uit",
+      query: "GraphQL query",
+      "execute-graphql-mutation": "Voer GraphQL mutatie uit",
+      mutation: "GraphQL mutatie",
+      variables: "Variabelen (JSON)",
+      resultProcessVariableName: "Resultaat procesvariabele",
     },
     en: {
       title: "LRK import Plugin",
@@ -56,6 +66,12 @@ const lrkImportPluginSpecification: PluginSpecification = {
       tablePlaceholder: "Table name",
       addTable: "+ Add table",
       removeTable: "Remove",
+      "execute-graphql-query": "Execute GraphQL Query",
+      query: "GraphQL query",
+      "execute-graphql-mutation": "Execute GraphQL Mutation",
+      mutation: "GraphQL mutation",
+      variables: "Variables (JSON)",
+      resultProcessVariableName: "Result process variable",
     },
   },
 };

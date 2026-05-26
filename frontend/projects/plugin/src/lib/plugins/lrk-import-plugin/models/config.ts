@@ -21,4 +21,20 @@ interface LrkImportPluginConfig extends PluginConfigurationData {
   hasuraAdminSecret: string;
 }
 
-export {LrkImportPluginConfig};
+interface TrackTablesActionConfig {
+  tables: Array<string>;
+}
+
+interface ExecuteGraphQlQueryActionConfig {
+  query: string;
+  variables?: string;
+  resultProcessVariableName: string;
+}
+
+interface ExecuteGraphQlMutationActionConfig {
+  mutation: string;
+  variables?: string;
+  resultProcessVariableName?: string;
+}
+
+export {LrkImportPluginConfig, TrackTablesActionConfig, ExecuteGraphQlQueryActionConfig, ExecuteGraphQlMutationActionConfig};

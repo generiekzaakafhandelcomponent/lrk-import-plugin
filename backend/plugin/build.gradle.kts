@@ -37,6 +37,7 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-starter-web")
 
     compileOnly("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
+    implementation("org.springframework.graphql:spring-graphql")
 
     // Testing
     testImplementation("com.ritense.valtimo:plugin-valtimo")

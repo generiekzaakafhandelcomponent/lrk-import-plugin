@@ -15,12 +15,9 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
-import {FunctionConfigurationComponent, FunctionConfigurationData} from "@valtimo/plugin";
-import {BehaviorSubject, combineLatest, Observable, Subscription, take} from "rxjs";
-
-interface TrackTablesConfig extends FunctionConfigurationData {
-  tables: string[];
-}
+import {FunctionConfigurationComponent} from "@valtimo/plugin";
+import {BehaviorSubject, combineLatest, map, Observable, Subscription, take} from "rxjs";
+import {TrackTablesActionConfig} from "../../models";
 
 @Component({
   standalone: false,
@@ -31,66 +28,47 @@ export class TrackTablesActionConfigurationComponent implements FunctionConfigur
   @Input() save$!: Observable<void>;
   @Input() disabled$!: Observable<boolean>;
   @Input() pluginId!: string;
-  @Input() prefillConfiguration$!: Observable<TrackTablesConfig>;
+  @Input() prefillConfiguration$!: Observable<TrackTablesActionConfig>;
   @Output() valid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() configuration: EventEmitter<FunctionConfigurationData> = new EventEmitter<FunctionConfigurationData>();
+  @Output() configuration: EventEmitter<TrackTablesActionConfig> = new EventEmitter<TrackTablesActionConfig>();
 
-  public tables: string[] = [""];
-
-  private readonly valid$ = new BehaviorSubject<boolean>(false);
   private saveSubscription!: Subscription;
-  private prefillSubscription!: Subscription;
+  private readonly formValue$ = new BehaviorSubject<TrackTablesActionConfig | null>(null);
+  private readonly valid$ = new BehaviorSubject<boolean>(false);
 
-  public ngOnInit(): void {
-    this.prefillSubscription = this.prefillConfiguration$?.pipe(take(1)).subscribe(config => {
-      if (config?.tables?.length) {
-        this.tables = [...config.tables];
-      }
-      this.emitValid();
-    });
+  defaultValues$: Observable<Array<{key: string; value: string}> | undefined>;
 
+  ngOnInit(): void {
+    this.openSaveSubscription();
+    this.defaultValues$ = this.prefillConfiguration$.pipe(
+      map(config => config?.tables?.map(value => ({key: value, value: value})))
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.saveSubscription?.unsubscribe();
+  }
+
+  formValueChange(formValue: TrackTablesActionConfig): void {
+    this.formValue$.next(formValue);
+    this.handleValid(formValue);
+  }
+
+  private handleValid(formValue: TrackTablesActionConfig): void {
+    const valid = !!(formValue?.tables?.length);
+    this.valid$.next(valid);
+    this.valid.emit(valid);
+  }
+
+  private openSaveSubscription(): void {
     this.saveSubscription = this.save$?.subscribe(() => {
-      combineLatest([this.valid$])
+      combineLatest([this.formValue$, this.valid$])
         .pipe(take(1))
-        .subscribe(([valid]) => {
+        .subscribe(([formValue, valid]) => {
           if (valid) {
-            this.configuration.emit({tables: this.nonEmptyTables()});
+            this.configuration.emit(formValue!);
           }
         });
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.saveSubscription?.unsubscribe();
-    this.prefillSubscription?.unsubscribe();
-  }
-
-  public addTable(): void {
-    this.tables = [...this.tables, ""];
-    this.emitValid();
-  }
-
-  public removeTable(index: number): void {
-    this.tables = this.tables.filter((_, i) => i !== index);
-    this.emitValid();
-  }
-
-  public trackByIndex(index: number): number {
-    return index;
-  }
-
-  public onTableChange(index: number, value: string): void {
-    this.tables = this.tables.map((t, i) => (i === index ? value : t));
-    this.emitValid();
-  }
-
-  private nonEmptyTables(): string[] {
-    return this.tables.map(t => t.trim()).filter(t => t.length > 0);
-  }
-
-  private emitValid(): void {
-    const valid = this.nonEmptyTables().length > 0;
-    this.valid$.next(valid);
-    this.valid.emit(valid);
   }
 }

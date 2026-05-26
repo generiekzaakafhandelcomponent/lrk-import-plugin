@@ -17,6 +17,11 @@
 package com.ritense.valtimoplugins.lrkimport.autoconfiguration
 
 import org.springframework.boot.autoconfigure.AutoConfiguration
+import org.springframework.context.annotation.Bean
+import org.springframework.web.client.RestClient
 
 @AutoConfiguration
-class LrkImportAutoConfiguration
+class LrkImportAutoConfiguration {
+    @Bean
+    fun lrkImportRestClient(): RestClient = RestClient.create()
+}
