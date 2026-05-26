@@ -8,12 +8,10 @@
     {
         "activityId": "time-api-sample-action",
         "activityType": "bpmn:ServiceTask:start",
-        "processLinkType": "plugin",
-        "pluginDefinitionKey": "sample-plugin",
-        "pluginActionDefinitionKey": "time-api-sample-action",
-        "pluginConfigurationId": "4ac9a49f-4aeb-4f91-86d9-853fd95a1b33",
-        "actionProperties": {
-            "message": "Hello from the sample plugin!"
-        }
+      "processLinkType": "plugin",
+      "pluginDefinitionKey": "lrk-import-plugin",
+      "pluginActionDefinitionKey": "create-lrk-tables",
+      "pluginConfigurationId": "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f60718",
+      "actionProperties": {}
     }
 ]

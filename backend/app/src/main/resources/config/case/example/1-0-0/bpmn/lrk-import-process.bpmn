@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_lrk"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.39.0">
+    <bpmn:collaboration id="Collaboration_lrk">
+        <bpmn:participant id="lrk-import-participant" name="LRK Import Process" processRef="lrk-import-process"/>
+    </bpmn:collaboration>
+    <bpmn:process id="lrk-import-process" name="LRK Import Process" isExecutable="true">
+        <bpmn:startEvent id="start-event" name="Process started">
+            <bpmn:outgoing>Flow_1</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:serviceTask id="create-lrk-tables" name="Create LRK tables via Hasura">
+            <bpmn:incoming>Flow_1</bpmn:incoming>
+            <bpmn:outgoing>Flow_2</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="end-event" name="Process ended">
+            <bpmn:extensionElements>
+                <camunda:executionListener expression="${valueResolverDelegateService.handleValue(execution, 'doc:/lrkTablesCreated', execution.getVariable('lrkTablesCreated'))}" event="start"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_2</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_1" sourceRef="start-event" targetRef="create-lrk-tables"/>
+        <bpmn:sequenceFlow id="Flow_2" sourceRef="create-lrk-tables" targetRef="end-event"/>
+    </bpmn:process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_lrk">
+            <bpmndi:BPMNShape id="Participant_lrk_di" bpmnElement="lrk-import-participant" isHorizontal="true">
+                <dc:Bounds x="160" y="100" width="600" height="200"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="start-event">
+                <dc:Bounds x="232" y="182" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="214" y="225" width="73" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ServiceTask_lrk_di" bpmnElement="create-lrk-tables">
+                <dc:Bounds x="370" y="160" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="end-event">
+                <dc:Bounds x="572" y="182" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="555" y="225" width="71" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+                <di:waypoint x="268" y="200"/>
+                <di:waypoint x="370" y="200"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+                <di:waypoint x="470" y="200"/>
+                <di:waypoint x="572" y="200"/>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,17 @@
+[
+    {
+      "activityId": "start-event",
+      "activityType": "bpmn:StartEvent:start",
+      "processLinkType": "form",
+      "formDefinitionName": "start-form-example"
+    },
+    {
+        "activityId": "create-lrk-tables",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "lrk-import-plugin",
+        "pluginActionDefinitionKey": "create-lrk-tables",
+        "pluginConfigurationId": "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f60718",
+        "actionProperties": {}
+    }
+]

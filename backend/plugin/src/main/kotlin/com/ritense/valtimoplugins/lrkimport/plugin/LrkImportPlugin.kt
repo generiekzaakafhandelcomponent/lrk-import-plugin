@@ -21,51 +21,56 @@ import com.ritense.plugin.annotation.PluginAction
 import com.ritense.plugin.annotation.PluginActionProperty
 import com.ritense.plugin.annotation.PluginProperty
 import com.ritense.processlink.domain.ActivityTypeWithEventName.SERVICE_TASK_START
-import com.ritense.valtimoplugins.lrkimport.client.SampleService
+import com.ritense.valtimoplugins.lrkimport.client.HasuraSchemaService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.operaton.bpm.engine.delegate.DelegateExecution
 
 private val logger = KotlinLogging.logger {}
 
-/**
- * Sample plugin demonstrating a simple action that interacts with an API endpoint.
- * Note that the key in the @Plugin annotation must be unique, and
- * should be equal to the pluginId in the plugin's frontend configuration.
- */
 @Plugin(
-    key = "sample-plugin",
+    key = "lrk-import-plugin",
     title = "LrkImport Plugin",
-    description = "Imports LRK data into a database",
+    description = "Imports LRK data into a Hasura-managed database",
 )
 open class LrkImportPlugin(
-    private val sampleService: SampleService,
+    private val hasuraSchemaService: HasuraSchemaService,
 ) {
-    @PluginProperty(key = "apiUrl", secret = false)
-    lateinit var apiUrl: String
+    @PluginProperty(key = "hasuraUrl", secret = false)
+    lateinit var hasuraUrl: String
 
-    /**
-     * Example action
-     * Sends a GET request to an API endpoint and returns the response.
-     */
+    @PluginProperty(key = "hasuraAdminSecret", secret = true)
+    lateinit var hasuraAdminSecret: String
+
     @PluginAction(
-        key = "time-api-sample-action",
-        title = "Time API test action",
-        description = "Time API plugin action",
+        key = "create-lrk-tables",
+        title = "Create LRK Tables",
+        description = "Creates the houder and voorziening tables via the Hasura Schema API",
         activityTypes = [SERVICE_TASK_START],
     )
-    open fun getCurrentTime(
+    open fun createLrkTables(execution: DelegateExecution) {
+        logger.info { "Creating LRK tables via Hasura Schema API at $hasuraUrl" }
+
+        hasuraSchemaService.createLrkTables(hasuraUrl, hasuraAdminSecret)
+        execution.setVariable("lrkTablesCreated", true)
+
+        logger.info { "LRK tables created successfully" }
+    }
+
+    @PluginAction(
+        key = "track-hasura-tables",
+        title = "Track Hasura Tables",
+        description = "Tracks the specified tables in Hasura so they are exposed via the GraphQL API",
+        activityTypes = [SERVICE_TASK_START],
+    )
+    open fun trackHasuraTables(
         execution: DelegateExecution,
-        @PluginActionProperty message: String,
-    ): String {
-        try {
-            val result = sampleService.printAPIResults(apiUrl = apiUrl)
-            logger.info { "Message: $message, Result: $result" }
-            execution.setVariable("message", message)
-            execution.setVariable("apiResult", result)
-            return result
-        } catch (e: Exception) {
-            logger.error(e) { "Error: ${e.cause}" }
-            return "Error: ${e.message}"
-        }
+        @PluginActionProperty tables: List<String>,
+    ) {
+        logger.info { "Tracking ${tables.size} table(s) in Hasura at $hasuraUrl: $tables" }
+
+        hasuraSchemaService.trackTables(hasuraUrl, hasuraAdminSecret, tables)
+        execution.setVariable("hasuraTablesTracked", tables)
+
+        logger.info { "Hasura tables tracked successfully" }
     }
 }

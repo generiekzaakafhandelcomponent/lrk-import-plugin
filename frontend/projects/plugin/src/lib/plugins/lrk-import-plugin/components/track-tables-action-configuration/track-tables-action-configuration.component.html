@@ -1,0 +1,54 @@
+<!--
+  ~ Copyright 2026 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div *ngIf="{disabled: disabled$ | async} as obs">
+  <label class="v-label">
+    {{ 'tables' | pluginTranslate: pluginId | async }}
+  </label>
+
+  <div
+    *ngFor="let table of tables; let i = index; trackBy: trackByIndex"
+    class="track-tables-row"
+  >
+    <v-input
+      [name]="'table-' + i"
+      [margin]="false"
+      [disabled]="obs.disabled"
+      [defaultValue]="table"
+      [required]="true"
+      [widthPx]="300"
+      [placeholder]="'tablePlaceholder' | pluginTranslate: pluginId | async"
+      (valueChange)="onTableChange(i, $event)"
+    ></v-input>
+    <button
+      type="button"
+      class="v-button v-button--secondary track-tables-remove"
+      [disabled]="obs.disabled || tables.length === 1"
+      (click)="removeTable(i)"
+    >
+      {{ 'removeTable' | pluginTranslate: pluginId | async }}
+    </button>
+  </div>
+
+  <button
+    type="button"
+    class="v-button v-button--secondary track-tables-add"
+    [disabled]="obs.disabled"
+    (click)="addTable()"
+  >
+    {{ 'addTable' | pluginTranslate: pluginId | async }}
+  </button>
+</div>

@@ -15,6 +15,10 @@
         "message": {
             "type": "string",
             "description": "Message that was set in the plugin action"
+        },
+        "lrkTablesCreated": {
+            "type": "boolean",
+            "description": "Whether the LRK tables were created successfully"
         }
     }
 }

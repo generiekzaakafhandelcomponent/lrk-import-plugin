@@ -1,10 +1,11 @@
 {
-    "name": "@valtimo-plugins/sample-plugin",
+    "name": "@valtimo-plugins/lrk-import-plugin",
     "license": "EUPL-1.2",
     "version": "0.0.1",
+    "main": "src/public_api.ts",
     "scripts": {
-        "build": "ng build @valtimo-plugins/sample-plugin",
-        "watch": "ng build @valtimo-plugins/sample-plugin --watch"
+        "build": "ng build @valtimo-plugins/lrk-import-plugin",
+        "watch": "ng build @valtimo-plugins/lrk-import-plugin --watch"
     },
     "peerDependencies": {
         "@angular/common": "19.2.20",

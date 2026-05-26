@@ -26,7 +26,7 @@ apply(from = "../../gradle/environment.gradle.kts")
 val configureEnvironment = extra["configureEnvironment"] as (task: ProcessForkOptions) -> Unit
 
 dockerCompose {
-    setProjectName("valtimo-docker-compose")
+    setProjectName("lrk-import-plugin")
     stopContainers = false
     removeContainers = false
     removeVolumes = false

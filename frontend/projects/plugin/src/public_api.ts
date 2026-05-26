@@ -15,11 +15,11 @@
  */
 
 /*
- * Public API Surface of sample-plugin
+ * Public API Surface of lrk-import-plugin
  */
 
-export * from "./lib/plugins/sample-plugin/models";
-export * from "./lib/plugins/sample-plugin/sample-plugin-module";
-export * from "./lib/plugins/sample-plugin/sample-plugin.specification";
-export * from "./lib/plugins/sample-plugin/components/sample-plugin-configuration/sample-plugin-configuration.component";
-export * from "./lib/plugins/sample-plugin/components/sample-action-configuration/sample-action-configuration.component";
+export * from "./lib/plugins/lrk-import-plugin/models";
+export * from "./lib/plugins/lrk-import-plugin/lrk-import-plugin-module";
+export * from "./lib/plugins/lrk-import-plugin/lrk-import-plugin.specification";
+export * from "./lib/plugins/lrk-import-plugin/components/lrk-import-plugin-configuration/lrk-import-plugin-configuration.component";
+export * from "./lib/plugins/lrk-import-plugin/components/create-tables-action-configuration/create-tables-action-configuration.component";

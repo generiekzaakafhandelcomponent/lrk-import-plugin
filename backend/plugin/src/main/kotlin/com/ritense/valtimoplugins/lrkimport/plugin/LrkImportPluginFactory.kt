@@ -18,17 +18,13 @@ package com.ritense.valtimoplugins.lrkimport.plugin
 
 import com.ritense.plugin.PluginFactory
 import com.ritense.plugin.service.PluginService
-import com.ritense.valtimoplugins.lrkimport.client.SampleService
+import com.ritense.valtimoplugins.lrkimport.client.HasuraSchemaService
 import org.springframework.stereotype.Component
 
-/**
- * Factory class to create instances of the SamplePlugin.
- * This is required for the plugin framework to instantiate the plugin.
- */
 @Component
 class LrkImportPluginFactory(
     pluginService: PluginService,
-    val sampleService: SampleService,
+    val hasuraSchemaService: HasuraSchemaService,
 ) : PluginFactory<LrkImportPlugin>(pluginService) {
-    override fun create(): LrkImportPlugin = LrkImportPlugin(sampleService)
+    override fun create(): LrkImportPlugin = LrkImportPlugin(hasuraSchemaService)
 }
