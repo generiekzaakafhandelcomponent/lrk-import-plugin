@@ -19,10 +19,12 @@ package com.ritense.valtimoplugins.lrkimport.client
 import org.springframework.graphql.client.HttpSyncGraphQlClient
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
+import java.util.concurrent.ConcurrentHashMap
 
 class HasuraClient(
     private val restClient: RestClient,
 ) {
+    private val graphQlClientCache = ConcurrentHashMap<String, HttpSyncGraphQlClient>()
     fun runSql(
         hasuraUrl: String,
         adminSecret: String,
@@ -60,12 +62,14 @@ class HasuraClient(
         hasuraUrl: String,
         adminSecret: String,
         query: String,
-        variables: Map<String, Any>,
+        variables: Map<String, Any?>,
     ): Map<String, Any>? {
-        val client = HttpSyncGraphQlClient.builder(restClient)
-            .url("$hasuraUrl/v1/graphql")
-            .header("x-hasura-admin-secret", adminSecret)
-            .build()
+        val client = graphQlClientCache.computeIfAbsent("$hasuraUrl|$adminSecret") {
+            HttpSyncGraphQlClient.builder(restClient)
+                .url("$hasuraUrl/v1/graphql")
+                .header("x-hasura-admin-secret", adminSecret)
+                .build()
+        }
 
         val response = client.document(query)
             .variables(variables)

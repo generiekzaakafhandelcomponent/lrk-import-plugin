@@ -15,7 +15,7 @@
  */
 
 dockerCompose {
-    setProjectName("sample-plugin")
+    setProjectName("lrk-import-plugin")
     isRequiredBy(project.tasks.integrationTesting)
 
     tasks.integrationTesting {
@@ -38,6 +38,7 @@ dependencies {
 
     compileOnly("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
     implementation("org.springframework.graphql:spring-graphql")
+    implementation("org.apache.commons:commons-csv:1.11.0")
 
     // Testing
     testImplementation("com.ritense.valtimo:plugin-valtimo")

@@ -21,6 +21,7 @@ import {CreateTablesActionConfigurationComponent} from "./components/create-tabl
 import {TrackTablesActionConfigurationComponent} from "./components/track-tables-action-configuration/track-tables-action-configuration.component";
 import {ExecuteGraphQlQueryActionConfigurationComponent} from "./components/execute-graphql-query-action-configuration/execute-graphql-query-action-configuration.component";
 import {ExecuteGraphQlMutationActionConfigurationComponent} from "./components/execute-graphql-mutation-action-configuration/execute-graphql-mutation-action-configuration.component";
+import {ImportLrkDataActionConfigurationComponent} from "./components/import-lrk-data-action-configuration/import-lrk-data-action-configuration.component";
 
 const lrkImportPluginSpecification: PluginSpecification = {
   pluginId: "lrk-import-plugin",
@@ -31,12 +32,14 @@ const lrkImportPluginSpecification: PluginSpecification = {
     "track-hasura-tables": TrackTablesActionConfigurationComponent,
     "execute-graphql-query": ExecuteGraphQlQueryActionConfigurationComponent,
     "execute-graphql-mutation": ExecuteGraphQlMutationActionConfigurationComponent,
+    "import-lrk-data": ImportLrkDataActionConfigurationComponent,
   },
   pluginTranslations: {
     nl: {
       title: "LRK import Plugin",
       "create-lrk-tables": "Maak LRK tabellen aan",
       "track-hasura-tables": "Volg Hasura tabellen",
+      "import-lrk-data": "Importeer LRK-data",
       description: "Plugin voor het importeren van LRK-data via Hasura.",
       configurationTitle: "Configuratienaam",
       hasuraUrl: "Hasura URL",
@@ -52,11 +55,15 @@ const lrkImportPluginSpecification: PluginSpecification = {
       mutation: "GraphQL mutatie",
       variables: "Variabelen (JSON)",
       resultProcessVariableName: "Resultaat procesvariabele",
+      csvUrl: "CSV URL",
+      batchSize: "Batchgrootte",
+      cbsCodes: "CBS-codes",
     },
     en: {
       title: "LRK import Plugin",
       "create-lrk-tables": "Create LRK Tables",
       "track-hasura-tables": "Track Hasura Tables",
+      "import-lrk-data": "Import LRK Data",
       description: "Plugin for importing LRK data via Hasura.",
       configurationTitle: "Configuration Name",
       hasuraUrl: "Hasura URL",
@@ -72,6 +79,9 @@ const lrkImportPluginSpecification: PluginSpecification = {
       mutation: "GraphQL mutation",
       variables: "Variables (JSON)",
       resultProcessVariableName: "Result process variable",
+      csvUrl: "CSV URL",
+      batchSize: "Batch size",
+      cbsCodes: "CBS codes",
     },
   },
 };

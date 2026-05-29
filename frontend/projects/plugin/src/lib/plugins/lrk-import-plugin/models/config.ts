@@ -37,4 +37,10 @@ interface ExecuteGraphQlMutationActionConfig {
   resultProcessVariableName?: string;
 }
 
-export {LrkImportPluginConfig, TrackTablesActionConfig, ExecuteGraphQlQueryActionConfig, ExecuteGraphQlMutationActionConfig};
+interface ImportLrkDataActionConfig {
+  csvUrl: string;
+  cbsCodes: Array<string>;
+  batchSize: number;
+}
+
+export {LrkImportPluginConfig, TrackTablesActionConfig, ExecuteGraphQlQueryActionConfig, ExecuteGraphQlMutationActionConfig, ImportLrkDataActionConfig};

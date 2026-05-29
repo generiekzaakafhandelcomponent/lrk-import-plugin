@@ -23,11 +23,12 @@ import {CreateTablesActionConfigurationComponent} from "./components/create-tabl
 import {TrackTablesActionConfigurationComponent} from "./components/track-tables-action-configuration/track-tables-action-configuration.component";
 import {ExecuteGraphQlQueryActionConfigurationComponent} from "./components/execute-graphql-query-action-configuration/execute-graphql-query-action-configuration.component";
 import {ExecuteGraphQlMutationActionConfigurationComponent} from "./components/execute-graphql-mutation-action-configuration/execute-graphql-mutation-action-configuration.component";
+import {ImportLrkDataActionConfigurationComponent} from "./components/import-lrk-data-action-configuration/import-lrk-data-action-configuration.component";
 
 @NgModule({
-  declarations: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent, ExecuteGraphQlQueryActionConfigurationComponent, ExecuteGraphQlMutationActionConfigurationComponent],
+  declarations: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent, ExecuteGraphQlQueryActionConfigurationComponent, ExecuteGraphQlMutationActionConfigurationComponent, ImportLrkDataActionConfigurationComponent],
   imports: [CommonModule, PluginTranslatePipeModule, FormModule, ValtimoInputModule, CarbonMultiInputModule, EditorModule],
-  exports: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent, ExecuteGraphQlQueryActionConfigurationComponent, ExecuteGraphQlMutationActionConfigurationComponent],
+  exports: [LrkImportPluginConfigurationComponent, CreateTablesActionConfigurationComponent, TrackTablesActionConfigurationComponent, ExecuteGraphQlQueryActionConfigurationComponent, ExecuteGraphQlMutationActionConfigurationComponent, ImportLrkDataActionConfigurationComponent],
 })
 export class LrkImportPluginModule {
 }

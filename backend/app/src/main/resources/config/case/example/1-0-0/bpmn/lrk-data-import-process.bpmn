@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_lrk_data"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.39.0">
+    <bpmn:collaboration id="Collaboration_lrk_data">
+        <bpmn:participant id="lrk-data-import-participant" name="LRK Data Import Process" processRef="lrk-data-import-process"/>
+    </bpmn:collaboration>
+    <bpmn:process id="lrk-data-import-process" name="LRK Data Import Process" isExecutable="true">
+        <bpmn:startEvent id="start-event" name="Process started">
+            <bpmn:outgoing>Flow_1</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:serviceTask id="import-lrk-data" name="Import LRK data">
+            <bpmn:incoming>Flow_1</bpmn:incoming>
+            <bpmn:outgoing>Flow_2</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="end-event" name="Process ended">
+            <bpmn:extensionElements>
+                <camunda:executionListener expression="${valueResolverDelegateService.handleValue(execution, 'doc:/lrkHoudersUpserted', execution.getVariable('lrkHoudersUpserted'))}" event="start"/>
+                <camunda:executionListener expression="${valueResolverDelegateService.handleValue(execution, 'doc:/lrkVoorzieningenUpserted', execution.getVariable('lrkVoorzieningenUpserted'))}" event="start"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_2</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_1" sourceRef="start-event" targetRef="import-lrk-data"/>
+        <bpmn:sequenceFlow id="Flow_2" sourceRef="import-lrk-data" targetRef="end-event"/>
+    </bpmn:process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_lrk_data">
+            <bpmndi:BPMNShape id="Participant_lrk_data_di" bpmnElement="lrk-data-import-participant" isHorizontal="true">
+                <dc:Bounds x="160" y="80" width="600" height="200"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="StartEvent_di" bpmnElement="start-event">
+                <dc:Bounds x="232" y="162" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="214" y="205" width="73" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ImportData_di" bpmnElement="import-lrk-data">
+                <dc:Bounds x="370" y="140" width="100" height="80"/>
+                <bpmndi:BPMNLabel/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_di" bpmnElement="end-event">
+                <dc:Bounds x="572" y="162" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="555" y="205" width="69" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+                <di:waypoint x="268" y="180"/>
+                <di:waypoint x="370" y="180"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+                <di:waypoint x="470" y="180"/>
+                <di:waypoint x="572" y="180"/>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>
