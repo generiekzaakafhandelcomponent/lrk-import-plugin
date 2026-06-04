@@ -32,25 +32,4 @@
     placeholder="LRK Import Plugin"
   >
   </v-input>
-  <v-input
-    name="hasuraUrl"
-    [title]="'hasuraUrl' | pluginTranslate: pluginId | async"
-    [margin]="true"
-    [disabled]="obs.disabled"
-    [defaultValue]="obs.prefill?.hasuraUrl"
-    [required]="true"
-    [widthPx]="350"
-  >
-  </v-input>
-  <v-input
-    name="hasuraAdminSecret"
-    [title]="'hasuraAdminSecret' | pluginTranslate: pluginId | async"
-    [margin]="true"
-    [disabled]="obs.disabled"
-    [defaultValue]="obs.prefill?.hasuraAdminSecret"
-    [required]="true"
-    [widthPx]="350"
-    type="password"
-  >
-  </v-input>
 </v-form>

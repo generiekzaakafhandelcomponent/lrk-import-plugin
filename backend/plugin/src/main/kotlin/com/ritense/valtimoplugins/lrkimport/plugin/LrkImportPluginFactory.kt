@@ -18,8 +18,6 @@ package com.ritense.valtimoplugins.lrkimport.plugin
 
 import com.ritense.plugin.PluginFactory
 import com.ritense.plugin.service.PluginService
-import com.ritense.valtimoplugins.lrkimport.client.HasuraClient
-import com.ritense.valtimoplugins.lrkimport.client.HasuraSchemaService
 import com.ritense.valtimoplugins.lrkimport.client.LrkCsvService
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
@@ -29,11 +27,5 @@ class LrkImportPluginFactory(
     pluginService: PluginService,
     private val restClient: RestClient,
 ) : PluginFactory<LrkImportPlugin>(pluginService) {
-    override fun create(): LrkImportPlugin {
-        val hasuraClient = HasuraClient(restClient)
-        return LrkImportPlugin(
-            hasuraSchemaService = HasuraSchemaService(hasuraClient),
-            lrkCsvService = LrkCsvService(restClient),
-        )
-    }
+    override fun create(): LrkImportPlugin = LrkImportPlugin(LrkCsvService(restClient))
 }

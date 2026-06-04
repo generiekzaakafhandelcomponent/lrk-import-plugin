@@ -75,6 +75,7 @@ import {TeamsModule} from "@valtimo/teams";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {environment} from "../environments/environment";
 
+import { hasuraPluginSpecification, HasuraPluginModule } from "@valtimo-plugins/hasura-plugin";
 import {lrkImportPluginSpecification, LrkImportPluginModule} from "@valtimo-plugins/lrk-import-plugin";
 
 export function tabsFactory() {
@@ -139,6 +140,7 @@ export function tabsFactory() {
     TranslationManagementModule,
     ValuePathSelectorComponent,
     WidgetModule,
+    HasuraPluginModule,
     LrkImportPluginModule
   ],
   providers: [
@@ -146,6 +148,7 @@ export function tabsFactory() {
       provide: PLUGINS_TOKEN,
       useValue: [
         lrkImportPluginSpecification,
+        hasuraPluginSpecification
       ],
     },
   ],

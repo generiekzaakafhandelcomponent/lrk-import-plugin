@@ -1,0 +1,7 @@
+[
+    {
+        "processDefinitionKey": "lrk-data-import-process",
+        "canInitializeDocument": true,
+        "startableByUser": true
+    }
+]

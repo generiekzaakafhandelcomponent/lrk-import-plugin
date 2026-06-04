@@ -37,7 +37,6 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-starter-web")
 
     compileOnly("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
-    implementation("org.springframework.graphql:spring-graphql")
     implementation("org.apache.commons:commons-csv:1.11.0")
 
     // Testing

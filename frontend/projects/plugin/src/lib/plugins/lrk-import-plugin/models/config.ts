@@ -16,31 +16,14 @@
 
 import {PluginConfigurationData} from "@valtimo/plugin";
 
-interface LrkImportPluginConfig extends PluginConfigurationData {
-  hasuraUrl: string;
-  hasuraAdminSecret: string;
-}
+interface LrkImportPluginConfig extends PluginConfigurationData {}
 
-interface TrackTablesActionConfig {
-  tables: Array<string>;
-}
-
-interface ExecuteGraphQlQueryActionConfig {
-  query: string;
-  variables?: string;
-  resultProcessVariableName: string;
-}
-
-interface ExecuteGraphQlMutationActionConfig {
-  mutation: string;
-  variables?: string;
-  resultProcessVariableName?: string;
-}
-
-interface ImportLrkDataActionConfig {
+interface DownloadLrkDataActionConfig {
   csvUrl: string;
   cbsCodes: Array<string>;
   batchSize: number;
+  houdersCollectionVariable: string;
+  voorzieningenCollectionVariable: string;
 }
 
-export {LrkImportPluginConfig, TrackTablesActionConfig, ExecuteGraphQlQueryActionConfig, ExecuteGraphQlMutationActionConfig, ImportLrkDataActionConfig};
+export {LrkImportPluginConfig, DownloadLrkDataActionConfig};

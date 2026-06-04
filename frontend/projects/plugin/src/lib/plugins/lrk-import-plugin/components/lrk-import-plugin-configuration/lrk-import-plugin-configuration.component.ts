@@ -50,7 +50,7 @@ export class LrkImportPluginConfigurationComponent implements PluginConfiguratio
   }
 
   private handleValid(formValue: LrkImportPluginConfig): void {
-    const valid = !!(formValue.configurationTitle && formValue.hasuraUrl && formValue.hasuraAdminSecret);
+    const valid = !!formValue.configurationTitle;
     this.valid$.next(valid);
     this.valid.emit(valid);
   }

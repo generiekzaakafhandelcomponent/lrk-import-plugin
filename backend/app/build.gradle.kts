@@ -7,6 +7,9 @@ dependencies {
     implementation("com.ritense.valtimo:valtimo-dependencies")
     implementation("com.ritense.valtimo:local-mail")
 
+    // hasura plugin
+    implementation("com.ritense.valtimoplugins:hasura-plugin:1.0.0")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.postgresql:postgresql")
     implementation("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
@@ -33,7 +36,7 @@ dockerCompose {
 }
 
 tasks.bootRun {
-    dependsOn("composeUp")
+  //  dependsOn("composeUp")
     systemProperty("spring.profiles.include", "dev")
     val t = this
     doFirst {

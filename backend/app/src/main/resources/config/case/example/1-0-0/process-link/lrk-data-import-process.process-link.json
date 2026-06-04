@@ -1,0 +1,21 @@
+[
+    {
+        "activityId": "start-event",
+        "activityType": "bpmn:StartEvent:start",
+        "processLinkType": "form",
+        "formDefinitionName": "start-form-example"
+    },
+    {
+        "activityId": "import-lrk-data",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "lrk-import-plugin",
+        "pluginActionDefinitionKey": "import-lrk-data",
+        "pluginConfigurationId": "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f60718",
+        "actionProperties": {
+            "csvUrl": "https://www.landelijkregisterkinderopvang.nl/opendata/export_opendata_lrk.csv",
+            "cbsCodes": ["202", "268", "363"],
+            "batchSize": 100
+        }
+    }
+]

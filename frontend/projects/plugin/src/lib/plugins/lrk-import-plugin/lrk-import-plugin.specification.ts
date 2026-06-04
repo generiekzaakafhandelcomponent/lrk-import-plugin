@@ -17,71 +17,37 @@
 import {PluginSpecification} from "@valtimo/plugin";
 import {LrkImportPluginConfigurationComponent} from "./components/lrk-import-plugin-configuration/lrk-import-plugin-configuration.component";
 import {LRK_IMPORT_PLUGIN_LOGO_BASE64} from "./assets";
-import {CreateTablesActionConfigurationComponent} from "./components/create-tables-action-configuration/create-tables-action-configuration.component";
-import {TrackTablesActionConfigurationComponent} from "./components/track-tables-action-configuration/track-tables-action-configuration.component";
-import {ExecuteGraphQlQueryActionConfigurationComponent} from "./components/execute-graphql-query-action-configuration/execute-graphql-query-action-configuration.component";
-import {ExecuteGraphQlMutationActionConfigurationComponent} from "./components/execute-graphql-mutation-action-configuration/execute-graphql-mutation-action-configuration.component";
-import {ImportLrkDataActionConfigurationComponent} from "./components/import-lrk-data-action-configuration/import-lrk-data-action-configuration.component";
+import {DownloadLrkDataActionConfigurationComponent} from "./components/download-lrk-data-action-configuration/download-lrk-data-action-configuration.component";
 
 const lrkImportPluginSpecification: PluginSpecification = {
   pluginId: "lrk-import-plugin",
   pluginConfigurationComponent: LrkImportPluginConfigurationComponent,
   pluginLogoBase64: LRK_IMPORT_PLUGIN_LOGO_BASE64,
   functionConfigurationComponents: {
-    "create-lrk-tables": CreateTablesActionConfigurationComponent,
-    "track-hasura-tables": TrackTablesActionConfigurationComponent,
-    "execute-graphql-query": ExecuteGraphQlQueryActionConfigurationComponent,
-    "execute-graphql-mutation": ExecuteGraphQlMutationActionConfigurationComponent,
-    "import-lrk-data": ImportLrkDataActionConfigurationComponent,
+    "download-lrk-data": DownloadLrkDataActionConfigurationComponent,
   },
   pluginTranslations: {
     nl: {
-      title: "LRK import Plugin",
-      "create-lrk-tables": "Maak LRK tabellen aan",
-      "track-hasura-tables": "Volg Hasura tabellen",
-      "import-lrk-data": "Importeer LRK-data",
-      description: "Plugin voor het importeren van LRK-data via Hasura.",
+      title: "LRK Import Plugin",
+      description: "Plugin voor het downloaden en voorbereiden van LRK-data voor import via Hasura.",
       configurationTitle: "Configuratienaam",
-      hasuraUrl: "Hasura URL",
-      hasuraAdminSecret: "Hasura Admin Secret",
-      actionDescription: "Maakt de tabellen 'houder' en 'voorziening' aan via de Hasura Schema API. Geen configuratie vereist.",
-      tables: "Te volgen tabellen",
-      tablePlaceholder: "Tabelnaam",
-      addTable: "+ Tabel toevoegen",
-      removeTable: "Verwijderen",
-      "execute-graphql-query": "Voer GraphQL query uit",
-      query: "GraphQL query",
-      "execute-graphql-mutation": "Voer GraphQL mutatie uit",
-      mutation: "GraphQL mutatie",
-      variables: "Variabelen (JSON)",
-      resultProcessVariableName: "Resultaat procesvariabele",
+      "download-lrk-data": "LRK-data downloaden",
       csvUrl: "CSV URL",
       batchSize: "Batchgrootte",
       cbsCodes: "CBS-codes",
+      houdersCollectionVariable: "Procesvariabele houders",
+      voorzieningenCollectionVariable: "Procesvariabele voorzieningen",
     },
     en: {
-      title: "LRK import Plugin",
-      "create-lrk-tables": "Create LRK Tables",
-      "track-hasura-tables": "Track Hasura Tables",
-      "import-lrk-data": "Import LRK Data",
-      description: "Plugin for importing LRK data via Hasura.",
+      title: "LRK Import Plugin",
+      description: "Plugin for downloading and preparing LRK data for import via Hasura.",
       configurationTitle: "Configuration Name",
-      hasuraUrl: "Hasura URL",
-      hasuraAdminSecret: "Hasura Admin Secret",
-      actionDescription: "Creates the 'houder' and 'voorziening' tables via the Hasura Schema API. No configuration required.",
-      tables: "Tables to track",
-      tablePlaceholder: "Table name",
-      addTable: "+ Add table",
-      removeTable: "Remove",
-      "execute-graphql-query": "Execute GraphQL Query",
-      query: "GraphQL query",
-      "execute-graphql-mutation": "Execute GraphQL Mutation",
-      mutation: "GraphQL mutation",
-      variables: "Variables (JSON)",
-      resultProcessVariableName: "Result process variable",
+      "download-lrk-data": "Download LRK Data",
       csvUrl: "CSV URL",
       batchSize: "Batch size",
       cbsCodes: "CBS codes",
+      houdersCollectionVariable: "Houders process variable",
+      voorzieningenCollectionVariable: "Voorzieningen process variable",
     },
   },
 };

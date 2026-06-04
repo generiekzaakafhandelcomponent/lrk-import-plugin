@@ -16,12 +16,23 @@
 
 package com.ritense.valtimoplugins.lrkimport.autoconfiguration
 
+import com.ritense.plugin.service.PluginService
+import com.ritense.valtimoplugins.lrkimport.plugin.LrkImportPluginFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.web.client.RestClient
 
 @AutoConfiguration
 class LrkImportAutoConfiguration {
+
     @Bean
     fun lrkImportRestClient(): RestClient = RestClient.create()
+
+    @Bean
+    @ConditionalOnMissingBean(LrkImportPluginFactory::class)
+    fun lrkImportPluginFactory(
+        pluginService: PluginService,
+        lrkImportRestClient: RestClient,
+    ): LrkImportPluginFactory = LrkImportPluginFactory(pluginService, lrkImportRestClient)
 }

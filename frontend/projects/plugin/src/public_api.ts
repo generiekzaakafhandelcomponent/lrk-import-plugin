@@ -22,4 +22,4 @@ export * from "./lib/plugins/lrk-import-plugin/models";
 export * from "./lib/plugins/lrk-import-plugin/lrk-import-plugin-module";
 export * from "./lib/plugins/lrk-import-plugin/lrk-import-plugin.specification";
 export * from "./lib/plugins/lrk-import-plugin/components/lrk-import-plugin-configuration/lrk-import-plugin-configuration.component";
-export * from "./lib/plugins/lrk-import-plugin/components/create-tables-action-configuration/create-tables-action-configuration.component";
+export * from "./lib/plugins/lrk-import-plugin/components/download-lrk-data-action-configuration/download-lrk-data-action-configuration.component";

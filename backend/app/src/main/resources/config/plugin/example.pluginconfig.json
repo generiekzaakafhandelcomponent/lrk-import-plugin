@@ -7,5 +7,14 @@
             "hasuraUrl": "http://localhost:8085",
             "hasuraAdminSecret": "admin"
         }
+    },
+    {
+        "id": "7f8e9d0c-b1a2-4c3d-8e5f-6789012345ab",
+        "title": "Hasura Plugin (Autodeployed)",
+        "pluginDefinitionKey": "hasura-plugin",
+        "properties": {
+            "hasuraUrl": "http://localhost:8085",
+            "hasuraAdminSecret": "admin"
+        }
     }
 ]
