@@ -101,9 +101,11 @@ open class LrkImportPlugin(
         storeBatches(execution, houders, houdersCollectionVariable, batchSize)
         storeBatches(execution, voorzieningen, voorzieningenCollectionVariable, batchSize)
 
+        val houderBatchCount = (houders.size + batchSize - 1) / batchSize
+        val voorzieningBatchCount = (voorzieningen.size + batchSize - 1) / batchSize
         logger.info {
-            "LRK data prepared: ${houders.size} houders in ${houders.chunked(batchSize).size} batches, " +
-                "${voorzieningen.size} voorzieningen in ${voorzieningen.chunked(batchSize).size} batches"
+            "LRK data prepared: ${houders.size} houders in $houderBatchCount batches, " +
+                "${voorzieningen.size} voorzieningen in $voorzieningBatchCount batches"
         }
     }
 
@@ -113,11 +115,6 @@ open class LrkImportPlugin(
         collectionVariable: String,
         batchSize: Int,
     ) {
-        val varNames = records.chunked(batchSize).mapIndexed { index, batch ->
-            val varName = "${collectionVariable}_$index"
-            execution.setVariable(varName, batch)
-            varName
-        }
-        execution.setVariable(collectionVariable, varNames)
+        execution.setVariable(collectionVariable, records.chunked(batchSize))
     }
 }
