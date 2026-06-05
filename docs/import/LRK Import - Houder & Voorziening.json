@@ -1,0 +1,525 @@
+{
+  "name": "LRK Import - Houder & Voorziening",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbs-codes-assignment",
+              "name": "target_cbs_codes",
+              "value": "=[\"202\", \"268\", \"363\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2ddcdc76-40f2-4c97-a7f2-1c22ac7fd8ba",
+      "name": "Set target cbs_codes1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5968,
+        -1216
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const targetCodes = $('Set target cbs_codes1').first().json.target_cbs_codes\n  .map(c => String(c).trim());\n\nreturn $input.all().filter(item => {\n  const code = String(item.json['cbs_code'] || '').trim();\n  return targetCodes.includes(code);\n});"
+      },
+      "id": "7b3ea4c2-92ac-448c-b7d0-29d8cda1c496",
+      "name": "Filter on cbs_codes1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5296,
+        -1216
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\n\nconst houderMap = new Map();\nconst voorzieningItems = [];\n\nfor (const item of rows) {\n  const row = item.json;\n\n  const type_oko = (row['type_oko'] || '').trim();\n  const kvk_raw  = (row['kvk_nummer_houder'] || '').trim();\n  const lrk_id   = (row['lrk_id'] || '').trim();\n\n  // Compute houder_id\n  let houder_id;\n  if (type_oko === 'VGO' && kvk_raw === '') {\n    houder_id = lrk_id;\n  } else {\n    houder_id = kvk_raw;\n  }\n\n  // Deduplicate houders - first occurrence wins\n  if (!houderMap.has(houder_id)) {\n    houderMap.set(houder_id, {\n      id_str:                     houder_id,\n      naam:                       (row['naam_houder'] || '').trim(),\n      kvk:                        kvk_raw !== '' ? Number(kvk_raw) : null,\n      contact_persoon:            (row['contact_persoon'] || '').replace(/^'+|'+$/g, '').trim(),\n      contact_telefoon:           (row['contact_telefoon'] || '').replace(/^'+|'+$/g, '').trim(),\n      contact_emailadres:         (row['contact_emailadres'] || '').replace(/^'+|'+$/g, '').trim(),\n      contact_website:            (row['contact_website'] || '').replace(/^'+|'+$/g, '').trim(),\n      correspondentie_adres:      (row['correspondentie_adres'] || '').trim(),\n      correspondentie_postcode:   (row['correspondentie_postcode'] || '').trim(),\n      correspondentie_woonplaats: (row['correspondentie_woonplaats'] || '').trim()\n    });\n  }\n\n  // Build voorziening row\n  voorzieningItems.push({\n    lrk_id,\n    houder_id_str:              houder_id,\n    adres:                      (row['opvanglocatie_adres'] || '').trim(),\n    plaats:                     (row['opvanglocatie_woonplaats'] || '').trim(),\n    postcode:                   (row['opvanglocatie_postcode'] || '').trim(),\n    verantwoordelijke_gemeente: (row['verantwoordelijke_gemeente'] || '').trim(),\n    gemeente_cbs_code:          (row['cbs_code'] || '').trim(),\n    soort:                      type_oko\n  });\n}\n\nreturn [{\n  json: {\n    houders:      Array.from(houderMap.values()),\n    voorzienings: voorzieningItems\n  }\n}];"
+      },
+      "id": "81b9fba3-210c-445b-b766-2fa376fce173",
+      "name": "Compute houder_id + deduplicate + split1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5072,
+        -1216
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $('Compute houder_id + deduplicate + split1').first().json;\nif (!data || !data.houders) return [];\nreturn data.houders.map(h => ({ json: h }));"
+      },
+      "id": "b8fe1c92-adb3-424e-867d-2e56d69fca65",
+      "name": "Emit houders1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4848,
+        -1216
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $('Compute houder_id + deduplicate + split1').first().json;\nif (!data || !data.voorzienings) return [];\nreturn data.voorzienings.map(v => ({ json: v }));"
+      },
+      "id": "f4cbf041-f63b-4ca3-ba45-bee709f04e05",
+      "name": "Emit voorzienings1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3728,
+        -1216
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*)::int AS found FROM houder WHERE id = '{{ $json.id_str }}'",
+        "options": {}
+      },
+      "id": "7811735d-7958-4eeb-8eae-1b4612bb47cf",
+      "name": "Check houder exists1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -4624,
+        -1216
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "aYSZWToJDazrT8yK",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "condition-not-exists",
+              "leftValue": "={{ Number($json.found) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "34de2b0c-a207-4f27-97d4-3442658b0641",
+      "name": "Houder exists?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -4416,
+        -1232
+      ]
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list"
+        },
+        "table": {
+          "__rl": true,
+          "value": "houder",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{$('Emit houders1').item.json.id_str}}",
+            "naam": "={{$('Emit houders1').item.json.naam}}",
+            "kvk": "={{$('Emit houders1').item.json.kvk}}",
+            "contact_persoon": "={{$('Emit houders1').item.json.contact_persoon}}",
+            "contact_telefoon": "={{$('Emit houders1').item.json.contact_telefoon}}",
+            "contact_emailadres": "={{$('Emit houders1').item.json.contact_emailadres}}",
+            "contact_website": "={{$('Emit houders1').item.json.contact_website}}",
+            "correspondentie_adres": "={{$('Emit houders1').item.json.correspondentie_adres}}",
+            "correspondentie_postcode": "={{$('Emit houders1').item.json.correspondentie_postcode}}",
+            "correspondentie_woonplaats": "={{$('Emit houders1').item.json.correspondentie_woonplaats}}"
+          },
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": true,
+              "defaultMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "naam",
+              "displayName": "naam",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "kvk",
+              "displayName": "kvk",
+              "required": false,
+              "defaultMatch": false,
+              "type": "number"
+            },
+            {
+              "id": "contact_persoon",
+              "displayName": "contact_persoon",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "contact_telefoon",
+              "displayName": "contact_telefoon",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "contact_emailadres",
+              "displayName": "contact_emailadres",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "contact_website",
+              "displayName": "contact_website",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "correspondentie_adres",
+              "displayName": "correspondentie_adres",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "correspondentie_postcode",
+              "displayName": "correspondentie_postcode",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "correspondentie_woonplaats",
+              "displayName": "correspondentie_woonplaats",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "10f851f5-5106-4279-b8bc-56117195c705",
+      "name": "Postgres INSERT houder1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -4192,
+        -1408
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "aYSZWToJDazrT8yK",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list"
+        },
+        "table": {
+          "__rl": true,
+          "value": "voorziening",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lrk_id": "={{ $json.lrk_id }}",
+            "houder_id": "={{ $json.houder_id_str }}",
+            "adres": "={{ $json.adres }}",
+            "plaats": "={{ $json.plaats }}",
+            "postcode": "={{ $json.postcode }}",
+            "verantwoordelijke_gemeente": "={{ $json.verantwoordelijke_gemeente }}",
+            "gemeente_cbs_code": "={{ $json.gemeente_cbs_code }}",
+            "soort": "={{ $json.soort }}"
+          },
+          "schema": [
+            {
+              "id": "lrk_id",
+              "displayName": "lrk_id",
+              "required": true,
+              "defaultMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "houder_id",
+              "displayName": "houder_id",
+              "required": true,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "adres",
+              "displayName": "adres",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "plaats",
+              "displayName": "plaats",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "postcode",
+              "displayName": "postcode",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "verantwoordelijke_gemeente",
+              "displayName": "verantwoordelijke_gemeente",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "gemeente_cbs_code",
+              "displayName": "gemeente_cbs_code",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            },
+            {
+              "id": "soort",
+              "displayName": "soort",
+              "required": false,
+              "defaultMatch": false,
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c38a0ae2-f8f7-4c13-8043-4a2a6fe7bd2f",
+      "name": "Postgres INSERT voorziening1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -3504,
+        -1216
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "aYSZWToJDazrT8yK",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -6192,
+        -1216
+      ],
+      "id": "694eba43-72b5-4700-bcc4-220a84fe0421",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = items[0];\n\nif (!item.binary?.data?.data) {\n  throw new Error('Still no base64 data. Value: ' + JSON.stringify(item.binary?.data?.data));\n}\n\nconst buffer = Buffer.from(item.binary.data.data, 'base64');\nconst csvText = buffer.toString('latin1').replace(/^\\uFEFF/, '');\n\nconst lines = csvText.split('\\n').filter(l => l.trim() !== '');\nconst headers = lines[0].split(';').map(h => h.trim());\n\nreturn lines.slice(1).map(line => {\n  const values = line.split(';');\n  const row = {};\n  headers.forEach((header, i) => {\n    row[header] = (values[i] || '').trim();\n  });\n  return { json: row };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5520,
+        -1216
+      ],
+      "id": "19a74b41-5451-4ca5-a0be-21649b6f123f",
+      "name": "Parse CSV"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/data/ggd/export_opendata_lrk.csv",
+        "options": {}
+      },
+      "id": "0a8ade19-72e3-4517-8471-9b3f775c3d1d",
+      "name": "Read Binary File1",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -5744,
+        -1216
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Set target cbs_codes1": {
+      "main": [
+        [
+          {
+            "node": "Read Binary File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter on cbs_codes1": {
+      "main": [
+        [
+          {
+            "node": "Compute houder_id + deduplicate + split1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute houder_id + deduplicate + split1": {
+      "main": [
+        [
+          {
+            "node": "Emit houders1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Emit voorzienings1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Emit houders1": {
+      "main": [
+        [
+          {
+            "node": "Check houder exists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Emit voorzienings1": {
+      "main": [
+        [
+          {
+            "node": "Postgres INSERT voorziening1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check houder exists1": {
+      "main": [
+        [
+          {
+            "node": "Houder exists?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Houder exists?1": {
+      "main": [
+        [
+          {
+            "node": "Postgres INSERT houder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set target cbs_codes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse CSV": {
+      "main": [
+        [
+          {
+            "node": "Filter on cbs_codes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Binary File1": {
+      "main": [
+        [
+          {
+            "node": "Parse CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1ca4ebc6-4d88-4845-a9b9-87f3d19983ce",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "af5787a83ca38c14ce8bcf7f2ec29890dfe9ada1fc3056348b3c64f771457353"
+  },
+  "id": "PHsLUGFDRP5AkDVA",
+  "tags": [
+    {
+      "updatedAt": "2026-04-13T09:08:05.994Z",
+      "createdAt": "2026-04-13T09:08:05.994Z",
+      "id": "n2adkujEJwegDaXE",
+      "name": "GGD"
+    }
+  ]
+}

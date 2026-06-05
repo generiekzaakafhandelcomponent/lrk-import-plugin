@@ -1,0 +1,47 @@
+[
+    {
+        "activityId": "start-event",
+        "activityType": "bpmn:StartEvent:start",
+        "processLinkType": "form",
+        "formDefinitionName": "start-form-example"
+    },
+    {
+        "activityId": "download-lrk-data",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "lrk-import-plugin",
+        "pluginActionDefinitionKey": "download-lrk-data",
+        "pluginConfigurationId": "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f60718",
+        "actionProperties": {
+            "csvUrl": "https://www.landelijkregisterkinderopvang.nl/opendata/export_opendata_lrk.csv",
+            "cbsCodes": ["202", "268", "363"],
+            "batchSize": 100,
+            "houdersCollectionVariable": "houderBatches",
+            "voorzieningenCollectionVariable": "voorzieningBatches"
+        }
+    },
+    {
+        "activityId": "import-houders",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "hasura-plugin",
+        "pluginActionDefinitionKey": "mutation-by-process-variable",
+        "pluginConfigurationId": "7f8e9d0c-b1a2-4c3d-8e5f-6789012345ab",
+        "actionProperties": {
+            "mutation": "mutation UpsertHouders($objects: [houder_insert_input!]!) {\n  insert_houder(objects: $objects, on_conflict: {\n    constraint: houder_pkey,\n    update_columns: [naam, kvk, contact_persoon, contact_telefoon, contact_emailadres, contact_website, correspondentie_adres, correspondentie_postcode, correspondentie_woonplaats, updated_at]\n  }) {\n    affected_rows\n  }\n}",
+            "objectsVariableName": "currentHouderBatch"
+        }
+    },
+    {
+        "activityId": "import-voorzieningen",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "hasura-plugin",
+        "pluginActionDefinitionKey": "mutation-by-process-variable",
+        "pluginConfigurationId": "7f8e9d0c-b1a2-4c3d-8e5f-6789012345ab",
+        "actionProperties": {
+            "mutation": "mutation UpsertVoorzieningen($objects: [voorziening_insert_input!]!) {\n  insert_voorziening(objects: $objects, on_conflict: {\n    constraint: voorziening_pkey,\n    update_columns: [houder_id, adres, plaats, postcode, verantwoordelijke_gemeente, gemeente_cbs_code, soort, updated_at]\n  }) {\n    affected_rows\n  }\n}",
+            "objectsVariableName": "currentVoorzieningBatch"
+        }
+    }
+]

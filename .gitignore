@@ -165,7 +165,6 @@ Desktop.ini
 dist
 out-tsc
 backend/.idea/
-frontend/package-lock.json
 .kotlin
 .idea
 migration

@@ -19,53 +19,102 @@ package com.ritense.valtimoplugins.lrkimport.plugin
 import com.ritense.plugin.annotation.Plugin
 import com.ritense.plugin.annotation.PluginAction
 import com.ritense.plugin.annotation.PluginActionProperty
-import com.ritense.plugin.annotation.PluginProperty
 import com.ritense.processlink.domain.ActivityTypeWithEventName.SERVICE_TASK_START
-import com.ritense.valtimoplugins.lrkimport.client.SampleService
+import com.ritense.valtimoplugins.lrkimport.client.LrkCsvService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.operaton.bpm.engine.delegate.DelegateExecution
+import java.time.Instant
+import kotlin.time.measureTimedValue
 
 private val logger = KotlinLogging.logger {}
 
-/**
- * Sample plugin demonstrating a simple action that interacts with an API endpoint.
- * Note that the key in the @Plugin annotation must be unique, and
- * should be equal to the pluginId in the plugin's frontend configuration.
- */
 @Plugin(
-    key = "sample-plugin",
+    key = "lrk-import-plugin",
     title = "LrkImport Plugin",
-    description = "Imports LRK data into a database",
+    description = "Downloads LRK CSV data and stores it in batched process variables for import via Hasura",
 )
 open class LrkImportPlugin(
-    private val sampleService: SampleService,
+    private val lrkCsvService: LrkCsvService,
 ) {
-    @PluginProperty(key = "apiUrl", secret = false)
-    lateinit var apiUrl: String
-
-    /**
-     * Example action
-     * Sends a GET request to an API endpoint and returns the response.
-     */
     @PluginAction(
-        key = "time-api-sample-action",
-        title = "Time API test action",
-        description = "Time API plugin action",
+        key = "download-lrk-data",
+        title = "Download LRK Data",
+        description = "Downloads LRK CSV, filters by CBS codes, transforms records and stores them in batched process variables",
         activityTypes = [SERVICE_TASK_START],
     )
-    open fun getCurrentTime(
+    open fun downloadLrkData(
         execution: DelegateExecution,
-        @PluginActionProperty message: String,
-    ): String {
-        try {
-            val result = sampleService.printAPIResults(apiUrl = apiUrl)
-            logger.info { "Message: $message, Result: $result" }
-            execution.setVariable("message", message)
-            execution.setVariable("apiResult", result)
-            return result
-        } catch (e: Exception) {
-            logger.error(e) { "Error: ${e.cause}" }
-            return "Error: ${e.message}"
+        @PluginActionProperty csvUrl: String,
+        @PluginActionProperty cbsCodes: List<String>,
+        @PluginActionProperty batchSize: Int,
+        @PluginActionProperty houdersCollectionVariable: String,
+        @PluginActionProperty voorzieningenCollectionVariable: String,
+    ) {
+        val (records, csvDuration) = measureTimedValue { lrkCsvService.downloadAndParse(csvUrl) }
+        val filtered = records.filter { it.cbsCode in cbsCodes }
+        logger.info { "Downloaded ${records.size} records in $csvDuration, ${filtered.size} match CBS filter" }
+
+        val now = Instant.now().toString()
+        val houderMap = LinkedHashMap<String, Map<String, Any?>>()
+        val voorzieningen = mutableListOf<Map<String, Any?>>()
+
+        for (record in filtered) {
+            val houderId = if (record.typeOko == "VGO" && record.kvkNummerHouder.isEmpty()) {
+                record.lrkId
+            } else {
+                record.kvkNummerHouder
+            }
+
+            houderMap.putIfAbsent(
+                houderId,
+                mapOf(
+                    "id" to houderId,
+                    "naam" to record.naamHouder,
+                    "kvk" to record.kvkNummerHouder.toLongOrNull(),
+                    "contact_persoon" to record.contactPersoon,
+                    "contact_telefoon" to record.contactTelefoon,
+                    "contact_emailadres" to record.contactEmailadres,
+                    "contact_website" to record.contactWebsite,
+                    "correspondentie_adres" to record.correspondentieAdres,
+                    "correspondentie_postcode" to record.correspondentiePostcode,
+                    "correspondentie_woonplaats" to record.correspondentieWoonplaats,
+                    "updated_at" to now,
+                ),
+            )
+
+            voorzieningen.add(
+                mapOf(
+                    "lrk_id" to record.lrkId,
+                    "houder_id" to houderId,
+                    "adres" to record.opvanglocatieAdres,
+                    "plaats" to record.opvanglocatieWoonplaats,
+                    "postcode" to record.opvanglocatiePostcode,
+                    "verantwoordelijke_gemeente" to record.verantwoordelijkeGemeente,
+                    "gemeente_cbs_code" to record.cbsCode,
+                    "soort" to record.typeOko,
+                    "updated_at" to now,
+                ),
+            )
         }
+
+        val houders = houderMap.values.toList()
+        storeBatches(execution, houders, houdersCollectionVariable, batchSize)
+        storeBatches(execution, voorzieningen, voorzieningenCollectionVariable, batchSize)
+
+        val houderBatchCount = (houders.size + batchSize - 1) / batchSize
+        val voorzieningBatchCount = (voorzieningen.size + batchSize - 1) / batchSize
+        logger.info {
+            "LRK data prepared: ${houders.size} houders in $houderBatchCount batches, " +
+                "${voorzieningen.size} voorzieningen in $voorzieningBatchCount batches"
+        }
+    }
+
+    private fun storeBatches(
+        execution: DelegateExecution,
+        records: List<Map<String, Any?>>,
+        collectionVariable: String,
+        batchSize: Int,
+    ) {
+        execution.setVariable(collectionVariable, records.chunked(batchSize))
     }
 }

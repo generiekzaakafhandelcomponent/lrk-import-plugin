@@ -1,0 +1,30 @@
+[
+    {
+        "activityId": "start-event",
+        "activityType": "bpmn:StartEvent:start",
+        "processLinkType": "form",
+        "formDefinitionName": "start-form-lrk-import-process"
+    },
+    {
+        "activityId": "create-tables",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "hasura-plugin",
+        "pluginActionDefinitionKey": "execute-sql-files",
+        "pluginConfigurationId": "7f8e9d0c-b1a2-4c3d-8e5f-6789012345ab",
+        "actionProperties": {
+            "files": ["create_houder.sql", "create_voorziening.sql"]
+        }
+    },
+    {
+        "activityId": "track-tables",
+        "activityType": "bpmn:ServiceTask:start",
+        "processLinkType": "plugin",
+        "pluginDefinitionKey": "hasura-plugin",
+        "pluginActionDefinitionKey": "track-tables",
+        "pluginConfigurationId": "7f8e9d0c-b1a2-4c3d-8e5f-6789012345ab",
+        "actionProperties": {
+            "tables": ["houder", "voorziening"]
+        }
+    }
+]

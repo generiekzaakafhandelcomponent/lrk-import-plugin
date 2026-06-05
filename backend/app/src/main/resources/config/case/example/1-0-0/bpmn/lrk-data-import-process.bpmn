@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_lrk_data"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.39.0">
+    <bpmn:collaboration id="Collaboration_lrk_data">
+        <bpmn:participant id="lrk-data-import-participant" name="LRK Data Import Process" processRef="lrk-data-import-process"/>
+    </bpmn:collaboration>
+    <bpmn:process id="lrk-data-import-process" name="LRK Data Import Process" isExecutable="true">
+        <bpmn:startEvent id="start-event" name="Process started">
+            <bpmn:outgoing>Flow_1</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:serviceTask id="download-lrk-data" name="Download en verwerk LRK-data">
+            <bpmn:incoming>Flow_1</bpmn:incoming>
+            <bpmn:outgoing>Flow_2</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:serviceTask id="import-houders" name="Importeer houder batches">
+            <bpmn:incoming>Flow_2</bpmn:incoming>
+            <bpmn:outgoing>Flow_3</bpmn:outgoing>
+            <bpmn:multiInstanceLoopCharacteristics isSequential="true"
+                camunda:collection="${houderBatches}"
+                camunda:elementVariable="currentHouderBatch">
+            </bpmn:multiInstanceLoopCharacteristics>
+        </bpmn:serviceTask>
+        <bpmn:serviceTask id="import-voorzieningen" name="Importeer voorziening batches">
+            <bpmn:incoming>Flow_3</bpmn:incoming>
+            <bpmn:outgoing>Flow_4</bpmn:outgoing>
+            <bpmn:multiInstanceLoopCharacteristics isSequential="true"
+                camunda:collection="${voorzieningBatches}"
+                camunda:elementVariable="currentVoorzieningBatch">
+            </bpmn:multiInstanceLoopCharacteristics>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="end-event" name="Process ended">
+            <bpmn:incoming>Flow_4</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_1" sourceRef="start-event" targetRef="download-lrk-data"/>
+        <bpmn:sequenceFlow id="Flow_2" sourceRef="download-lrk-data" targetRef="import-houders"/>
+        <bpmn:sequenceFlow id="Flow_3" sourceRef="import-houders" targetRef="import-voorzieningen"/>
+        <bpmn:sequenceFlow id="Flow_4" sourceRef="import-voorzieningen" targetRef="end-event"/>
+    </bpmn:process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_lrk_data">
+            <bpmndi:BPMNShape id="Participant_lrk_data_di" bpmnElement="lrk-data-import-participant" isHorizontal="true">
+                <dc:Bounds x="160" y="80" width="900" height="200"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="StartEvent_di" bpmnElement="start-event">
+                <dc:Bounds x="232" y="162" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="214" y="205" width="73" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="DownloadData_di" bpmnElement="download-lrk-data">
+                <dc:Bounds x="340" y="140" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ImportHouders_di" bpmnElement="import-houders">
+                <dc:Bounds x="510" y="140" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ImportVoorzieningen_di" bpmnElement="import-voorzieningen">
+                <dc:Bounds x="680" y="140" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_di" bpmnElement="end-event">
+                <dc:Bounds x="862" y="162" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="845" y="205" width="69" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+                <di:waypoint x="268" y="180"/>
+                <di:waypoint x="340" y="180"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+                <di:waypoint x="440" y="180"/>
+                <di:waypoint x="510" y="180"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+                <di:waypoint x="610" y="180"/>
+                <di:waypoint x="680" y="180"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+                <di:waypoint x="780" y="180"/>
+                <di:waypoint x="862" y="180"/>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>
