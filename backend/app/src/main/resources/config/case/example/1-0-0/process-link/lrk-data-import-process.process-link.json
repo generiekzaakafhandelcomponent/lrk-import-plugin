@@ -3,7 +3,7 @@
         "activityId": "start-event",
         "activityType": "bpmn:StartEvent:start",
         "processLinkType": "form",
-        "formDefinitionName": "start-form-example"
+        "formDefinitionName": "start-form-lrk-data-import-process"
     },
     {
         "activityId": "download-lrk-data",

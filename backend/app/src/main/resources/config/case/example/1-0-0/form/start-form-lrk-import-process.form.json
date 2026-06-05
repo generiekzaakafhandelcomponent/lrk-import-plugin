@@ -1,0 +1,18 @@
+{
+    "display": "form",
+    "components": [
+        {
+            "key": "html",
+            "type": "htmlelement",
+            "input": false,
+            "label": "Instructions",
+            "content": "<p>Start het LRK setup-proces. Dit proces voert de volgende stappen uit:</p><ol><li>Aanmaken van de <strong>houder</strong>- en <strong>voorziening</strong>-tabellen in de database (indien nog niet aanwezig).</li><li>Registreren van de tabellen in Hasura zodat ze beschikbaar zijn via de GraphQL API.</li></ol><p><em>Dit proces hoeft slechts eenmalig uitgevoerd te worden.</em></p>"
+        },
+        {
+            "key": "submit",
+            "type": "button",
+            "input": true,
+            "label": "Start"
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 [
     {
-        "processDefinitionKey": "lrk-import-process",
+        "processDefinitionKey": "lrk-setup-import-process",
         "canInitializeDocument": true,
         "startableByUser": true
     }
