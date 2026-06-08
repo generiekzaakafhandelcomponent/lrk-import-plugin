@@ -1,0 +1,18 @@
+{
+    "display": "form",
+    "components": [
+        {
+            "key": "html",
+            "type": "htmlelement",
+            "input": false,
+            "label": "Instructions",
+            "content": "<p>Start het LRK data-importproces. Dit proces voert de volgende stappen uit:</p><ol><li>Downloaden van de LRK CSV-export en filteren op CBS-codes.</li><li>Importeren van <strong>houder</strong>-gegevens in batches van 100 records.</li><li>Importeren van <strong>voorziening</strong>-gegevens in batches van 100 records.</li></ol><p><strong>Let op:</strong> zorg dat het setup-proces al eerder is uitgevoerd.</p>"
+        },
+        {
+            "key": "submit",
+            "type": "button",
+            "input": true,
+            "label": "Start import"
+        }
+    ]
+}

@@ -1,0 +1,70 @@
+<!--
+  ~ Copyright 2026 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<v-form
+  (valueChange)="formValueChange($event)"
+  *ngIf="{
+    disabled: disabled$ | async,
+    prefill: prefillConfiguration$ ? (prefillConfiguration$ | async) : null
+  } as obs"
+>
+  <v-input
+    name="csvUrl"
+    [title]="'csvUrl' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.csvUrl"
+    [required]="true"
+    [widthPx]="350"
+  ></v-input>
+
+  <v-input
+    name="batchSize"
+    [title]="'batchSize' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.batchSize?.toString()"
+    [required]="true"
+    [widthPx]="350"
+  ></v-input>
+
+  <v-input
+    name="houdersCollectionVariable"
+    [title]="'houdersCollectionVariable' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.houdersCollectionVariable"
+    [required]="true"
+    [widthPx]="350"
+  ></v-input>
+
+  <v-input
+    name="voorzieningenCollectionVariable"
+    [title]="'voorzieningenCollectionVariable' | pluginTranslate: pluginId | async"
+    [margin]="true"
+    [disabled]="obs.disabled"
+    [defaultValue]="obs.prefill?.voorzieningenCollectionVariable"
+    [required]="true"
+    [widthPx]="350"
+  ></v-input>
+
+  <valtimo-carbon-multi-input
+    name="cbsCodes"
+    [title]="'cbsCodes' | pluginTranslate: pluginId | async"
+    [defaultValues]="defaultCbsCodes$ | async"
+    [fullWidth]="true"
+  ></valtimo-carbon-multi-input>
+</v-form>

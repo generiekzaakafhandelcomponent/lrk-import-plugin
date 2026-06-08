@@ -3,7 +3,7 @@
         "activityId": "start-event",
         "activityType": "bpmn:StartEvent:start",
         "processLinkType": "form",
-        "formDefinitionName": "start-form-lrk-import-process"
+        "formDefinitionName": "start-form-lrk-setup-import-process"
     },
     {
         "activityId": "create-tables",
