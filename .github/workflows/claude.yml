@@ -86,15 +86,6 @@ jobs:
               '| 🔍 Analysing diff    | ✅ Done |',
               '| 💬 Posting feedback  | ✅ Done |',
               '',
-              '### 📈 Usage',
-              '',
-              '| Metric | Value |',
-              '|--------|-------|',
-              `| 🧠 Model         | \`${model}\`   |`,
-              `| 📨 Input tokens  | ${inputTok}    |`,
-              `| 📤 Output tokens | ${outputTok}   |`,
-              `| 💰 Est. cost     | $${cost}       |`,
-              '',
               `_Review completed at ${new Date().toUTCString()}_`,
             ].join('\n');
 
