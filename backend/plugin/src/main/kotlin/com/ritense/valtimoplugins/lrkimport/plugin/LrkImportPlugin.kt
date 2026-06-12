@@ -31,7 +31,7 @@ private val logger = KotlinLogging.logger {}
 @Plugin(
     key = "lrk-import-plugin",
     title = "LrkImport Plugin",
-    description = "Downloads LRK CSV data from given URL and stores it in batched process variables for import via Hasura",
+    description = "Downloads LRK CSV data from given URL and stores it in batched process variables for import a tool like Hasura",
 )
 open class LrkImportPlugin(
     private val lrkCsvService: LrkCsvService,
