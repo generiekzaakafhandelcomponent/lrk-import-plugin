@@ -81,6 +81,7 @@
         "@valtimo/task": "13.24.0",
         "@valtimo/task-management": "13.24.0",
         "@valtimo/teams": "13.24.0",
+        "@valtimo-plugins/hasura-plugin": "1.0.0",
         "@webcomponents/custom-elements": "1.6.0",
         "ajv": "8.17.1",
         "angular-split": "19.0.0",
