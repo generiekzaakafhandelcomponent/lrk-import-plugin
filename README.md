@@ -1,16 +1,18 @@
-# Valtimo Plugin Template
+# LRK Import Plugin for Valtimo
 
-A template repository for building your own Valtimo plugins. Copy this project to get a ready-made structure with build
-configuration, CI/CD workflows, and a working example to start from.
+A [Valtimo](https://www.valtimo.nl) plugin that downloads CSV data from the Dutch childcare registration ([LRK — Landelijk Register Kinderopvang](https://www.landelijkregisterkinderopvang.nl)), filters it by municipality (CBS) codes, and stores the transformed records as batched process variables ready for import into a PostgreSQL database via the [Hasura Plugin](https://github.com/generiekzaakafhandelcomponent/gzac-plugin-hasura).
 
-## Getting started
+## How it works
 
-1. Copy or fork this repository
-2. Rename the sample plugin package, module, and configuration to match your plugin
-3. Follow the [Getting Started](documentation/getting-started.md) guide for setup and development instructions
+1. The plugin downloads the LRK open-data CSV from a configurable URL (retries up to 3 times with exponential backoff).
+2. Records are filtered by one or more CBS municipality codes.
+3. Filtered records are split into two datasets:
+   - **Houders** — childcare organisations (deduplicated by KVK number; VGO-type entries without a KVK use their LRK ID instead).
+   - **Voorzieningen** — individual childcare locations.
+4. Both datasets are chunked into batches and stored as process variables for downstream Hasura bulk-insert mutations.
 
 ## Documentation
 
-- [Getting Started](documentation/getting-started.md) — setup and development instructions
-- [Example Application](documentation/example-application.md) — running the example app locally
-- [Sample Plugin](documentation/plugin.md) — reference implementation included in this template
+- [Getting Started](documentation/getting-started.md) — setup and integration instructions
+- [Example Application](documentation/example-application.md) — running the bundled demo locally
+- [Plugin Reference](documentation/plugin.md) — action and configuration details
