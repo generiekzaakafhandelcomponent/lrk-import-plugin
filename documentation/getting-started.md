@@ -1,57 +1,71 @@
-# Example Application
+# Getting Started
 
-This project also contains a working example application which is meant to showcase the plugin.
-
-## Running the example application
-
-All commands below should be run from the **project root** directory.
-
-### Prerequisites
+## Prerequisites
 
 - Java 21
-- [Docker (Desktop)](https://www.docker.com/products/docker-desktop/)
+- Node.js 20 (use `nvm use 20`)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- A running Valtimo instance (v13.29+)
+- A running Hasura instance connected to a PostgreSQL database (the [Hasura Plugin](https://github.com/generiekzaakafhandelcomponent/gzac-plugin-hasura) handles this)
 
-### Start docker
+## Backend
 
-Make sure docker is running.
+Add the dependency to your Valtimo backend project:
 
-Start with gradle script:
-
-```shell
-./gradlew :backend:app:composeUp
+```kotlin
+dependencies {
+    implementation("com.ritense.valtimoplugins:lrk-import-plugin:1.0.0")
+}
 ```
 
-### Start backend
+The plugin auto-configures via Spring Boot's autoconfiguration mechanism — no manual bean registration is required.
 
-By gradle script:
+## Frontend
 
-```shell
-./gradlew :backend:app:bootRun
-```
-
-### Start frontend
+Install the package:
 
 ```shell
-nvm use 20
-npm run clean
-npm install
-npm run build
-npm start
+npm install @valtimo-plugins/lrk-import-plugin
 ```
 
-### Keycloak users
+Register the module and specification in your `app.module.ts`:
 
-The example application has a few test users that are preconfigured.
+```typescript
+import {
+    LrkImportPluginModule,
+    lrkImportPluginSpecification,
+} from '@valtimo-plugins/lrk-import-plugin';
 
-| Name         | Role           | Username  | Password  |
-|--------------|----------------|-----------|-----------|
-| James Vance  | ROLE_USER      | user      | user      |
-| Asha Miller  | ROLE_ADMIN     | admin     | admin     |
-| Morgan Finch | ROLE_DEVELOPER | developer | developer |
+@NgModule({
+    imports: [
+        LrkImportPluginModule,
+    ],
+    providers: [
+        {
+            provide: PLUGIN_TOKEN,
+            useValue: [
+                lrkImportPluginSpecification,
+            ]
+        }
+    ]
+})
+```
 
-## Source code
+## Plugin Configuration
 
-The source code is split up into two modules:
+Create a plugin configuration in the Valtimo admin UI under **Plugins**. The only required field is a configuration name — all action-specific properties (CSV URL, CBS codes, batch size, process variable names) are configured per process link.
 
-1. [Frontend](/frontend)
-2. [Backend](/backend)
+## Database setup
+
+The plugin stores transformed records as process variables for downstream Hasura mutations. Before running the import, the target tables must exist in your Hasura-managed PostgreSQL database. Reference DDL is provided in [docs/sql/](../docs/sql/):
+
+- `create_houder.sql` — `houder` table (organisations)
+- `create_voorziening.sql` — `voorziening` table (locations, foreign-keyed to `houder`)
+
+Use the Hasura Plugin's **Execute SQL Files** and **Track Tables** actions in a setup process to create and expose these tables before importing data.
+
+## Further reading
+
+- [Plugin Reference](plugin.md) — action properties and output format
+- [Example Application](example-application.md) — running the bundled demo locally
+- [Valtimo plugin documentation](https://docs.valtimo.nl/features/plugins/plugins/custom-plugin-definition)
