@@ -8,7 +8,7 @@ dependencies {
     implementation("com.ritense.valtimo:local-mail")
 
     // hasura plugin
-    implementation("com.ritense.valtimoplugins:hasura-plugin:1.0.0")
+    implementation("com.ritense.valtimoplugins:hasura-plugin:1.1.0")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.postgresql:postgresql")
