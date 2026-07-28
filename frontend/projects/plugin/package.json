@@ -1,7 +1,7 @@
 {
     "name": "@valtimo-plugins/lrk-import-plugin",
     "license": "EUPL-1.2",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "main": "src/public_api.ts",
     "scripts": {
         "build": "ng build @valtimo-plugins/lrk-import-plugin",
