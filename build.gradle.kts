@@ -38,6 +38,7 @@ allprojects {
         mavenCentral()
         maven { url = uri("https://s01.oss.sonatype.org/content/repositories/releases/") }
         maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
+        maven { url = uri("https://valtimo-releases.s3.eu-central-1.amazonaws.com/") }
     }
 }
 
@@ -73,7 +74,8 @@ subprojects {
         }
 
         dependencies {
-            implementation(platform("com.ritense.valtimo:valtimo-dependency-versions:$valtimoVersion"))
+            compileOnly(platform("com.ritense.valtimo:valtimo-dependency-versions:$valtimoVersion"))
+            testImplementation(platform("com.ritense.valtimo:valtimo-dependency-versions:$valtimoVersion"))
             implementation("cn.lalaki.central:central:$lalakiCentralVersion")
         }
 

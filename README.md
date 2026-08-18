@@ -16,3 +16,4 @@ A [Valtimo](https://www.valtimo.nl) plugin that downloads CSV data from the Dutc
 - [Getting Started](documentation/getting-started.md) — setup and integration instructions
 - [Example Application](documentation/example-application.md) — running the bundled demo locally
 - [Plugin Reference](documentation/plugin.md) — action and configuration details
+- [Release notes](documentation/release-notes.md) — versiegeschiedenis en wijzigingen
