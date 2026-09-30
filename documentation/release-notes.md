@@ -2,6 +2,10 @@
 
 Overzicht van wijzigingen per versie van de LRK Import-plugin.
 
+## 1.2.2
+
+Ondersteuning voor Valtimo 13.48.0.
+
 ## 1.2.1
 
 Valtimo-versies worden niet langer afgedwongen op consumers van de plugin: de Valtimo dependency-BOM wordt nu alleen
