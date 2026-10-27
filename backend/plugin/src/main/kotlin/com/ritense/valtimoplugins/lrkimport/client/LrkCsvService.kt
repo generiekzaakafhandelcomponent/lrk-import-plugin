@@ -45,6 +45,7 @@ class LrkCsvService(
                 LrkCsvRecord(
                     lrkId = row["lrk_id"],
                     typeOko = row["type_oko"],
+                    actueleNaamOko = row["actuele_naam_oko"],
                     kvkNummerHouder = row["kvk_nummer_houder"],
                     naamHouder = row["naam_houder"],
                     contactPersoon = row["contact_persoon"].stripApostrophes(),

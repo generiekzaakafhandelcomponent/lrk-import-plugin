@@ -86,6 +86,7 @@ open class LrkImportPlugin(
                 mapOf(
                     "lrk_id" to record.lrkId,
                     "houder_id" to houderId,
+                    "actuele_naam_oko" to record.actueleNaamOko,
                     "adres" to record.opvanglocatieAdres,
                     "plaats" to record.opvanglocatieWoonplaats,
                     "postcode" to record.opvanglocatiePostcode,

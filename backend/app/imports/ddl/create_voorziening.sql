@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS voorziening (
                              lrk_id                      VARCHAR(50)     PRIMARY KEY,
                              houder_id                   VARCHAR(50)     NOT NULL REFERENCES houder(id),
+                             actuele_naam_oko            VARCHAR(255),
                              adres                       VARCHAR(255),
                              plaats                      VARCHAR(100),
                              postcode                    VARCHAR(10),
