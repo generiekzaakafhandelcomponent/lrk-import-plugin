@@ -40,7 +40,7 @@
         "pluginActionDefinitionKey": "mutation-by-process-variable",
         "pluginConfigurationId": "7f8e9d0c-b1a2-4c3d-8e5f-6789012345ab",
         "actionProperties": {
-            "mutation": "mutation UpsertVoorzieningen($objects: [voorziening_insert_input!]!) {\n  insert_voorziening(objects: $objects, on_conflict: {\n    constraint: voorziening_pkey,\n    update_columns: [houder_id, adres, plaats, postcode, verantwoordelijke_gemeente, gemeente_cbs_code, soort, updated_at]\n  }) {\n    affected_rows\n  }\n}",
+            "mutation": "mutation UpsertVoorzieningen($objects: [voorziening_insert_input!]!) {\n  insert_voorziening(objects: $objects, on_conflict: {\n    constraint: voorziening_pkey,\n    update_columns: [houder_id, actuele_naam_oko, adres, plaats, postcode, verantwoordelijke_gemeente, gemeente_cbs_code, soort, updated_at]\n  }) {\n    affected_rows\n  }\n}",
             "objectsVariableName": "currentVoorzieningBatch"
         }
     }

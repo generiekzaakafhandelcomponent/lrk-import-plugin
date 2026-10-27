@@ -19,6 +19,7 @@ package com.ritense.valtimoplugins.lrkimport.client
 data class LrkCsvRecord(
     val lrkId: String,
     val typeOko: String,
+    val actueleNaamOko: String,
     val kvkNummerHouder: String,
     val naamHouder: String,
     val contactPersoon: String,

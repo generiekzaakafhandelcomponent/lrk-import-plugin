@@ -1,4 +1,4 @@
-rootProject.name = "valtimo-plugin-template"
+rootProject.name = "lrk-import-plugin"
 include(
     "backend",
     "backend:app",
